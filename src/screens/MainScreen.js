@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import FoodCard from '../components/FoodCard.js';
+// import FoodCard from '../components/FoodCard.js';
 export default function MainScreen() {
   return (
     <View style={styles.container}>
@@ -25,8 +25,8 @@ export default function MainScreen() {
 
       </View> */}
       <ScrollView style={styles.cards}>
-        <FoodCard name='abc' image='https://purepng.com/public/uploads/large/heart-icon-y1k.png' 
-          tags='Sweet' location='vn' price='11' />
+        {/* <FoodCard name='abc' image='https://purepng.com/public/uploads/large/heart-icon-y1k.png' 
+          tags='Sweet' location='vn' price='11' /> */}
       </ScrollView>
     </View>
   );

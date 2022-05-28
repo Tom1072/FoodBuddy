@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, StyleSheet, Text, Button} from 'react-native'
+import React from "react";
+import { View, StyleSheet, Text, Button } from "react-native";
 
 export default function LandingScreen({ navigation }) {
   return (
@@ -17,6 +17,10 @@ export default function LandingScreen({ navigation }) {
             title="Main"
             onPress={() => {navigation.navigate('MainScreen')}} 
         />
+        <Button
+            title="Question"
+            onPress={() => {navigation.navigate('QuestionScreen')}} 
+        />
       </View>
   )
 }
@@ -24,8 +28,8 @@ export default function LandingScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
