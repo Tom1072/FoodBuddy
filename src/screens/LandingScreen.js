@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Button } from 'react-native-ui-lib/src/components/button';
+import { View, StyleSheet, Text, Button} from 'react-native'
 
 export default function LandingScreen({ navigation }) {
   return (
       <View style={styles.container}>
+        <Text>Landing Screen</Text>
         <Button
             title="Login"
             onPress={() => {navigation.navigate('LoginScreen')}} 
