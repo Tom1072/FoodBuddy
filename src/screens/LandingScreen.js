@@ -13,6 +13,10 @@ export default function LandingScreen({ navigation }) {
             title="Register"
             onPress={() => {navigation.navigate('RegisterScreen')}} 
         />
+        <Button
+            title="Main"
+            onPress={() => {navigation.navigate('MainScreen')}} 
+        />
       </View>
   )
 }
