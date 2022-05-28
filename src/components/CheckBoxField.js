@@ -9,7 +9,6 @@ export default function CheckBoxField(props) {
   return (
     <View style={styles.container}>
       <SectionTitle>{title}</SectionTitle>
-      <View style={{ marginBottom: 5 }}></View>
 
       {Object.entries(values).map(([key, val], index) => (
         <TouchableOpacity

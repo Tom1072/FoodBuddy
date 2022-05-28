@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
   screenTitle: {
     fontSize: 30,
     fontWeight: "900",
+    marginBottom: 20
   },
   sectionTitle: {
     fontSize: 20,

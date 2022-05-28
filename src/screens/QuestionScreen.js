@@ -1,13 +1,17 @@
 import React from "react";
-import { StyleSheet, ScrollView, StatusBar } from "react-native";
 import CheckBoxField from "../components/CheckBoxField";
 import TextField from "../components/TextField";
+
+import { StyleSheet, Text, ScrollView } from "react-native";
 import { Button } from "react-native-paper";
-import { ScreenTitle } from "../components/Typography";
+import { ScreenTitle, SectionTitle } from "../components/Typography";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { FlatList } from "react-native-gesture-handler";
+
 export default function QuestionScreen() {
-  const [area, setArea] = React.useState("");
+  const [area, setArea] = React.useState(null);
   const [budgets, setBudgets] = React.useState({
     "Inexpensive ($)": true,
     "Moderately expensive ($$)": true,
@@ -39,35 +43,51 @@ export default function QuestionScreen() {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <ScrollView
+      <FlatList
+        data={[{}]}
+        keyExtractor={() => null}
         style={styles.mainContainer}
         contentContainerStyle={styles.contentContainer}
-      >
-        <ScreenTitle>Preferences</ScreenTitle>
-        <TextField
-          title="Area"
-          placeholder="Anywhere"
-          value={area}
-          onChange={(text) => setArea(text)}
-        />
-        <CheckBoxField
-          title="Cuisines"
-          values={cuisines}
-          onChange={(key) => handleChangeCheckBox(key, cuisines, setCuisines)}
-        />
-        <CheckBoxField
-          title="Budget"
-          values={budgets}
-          onChange={(key) => handleChangeCheckBox(key, budgets, setBudgets)}
-        />
-        <Button
-          mode="contained"
-          style={styles.submitButton}
-          onPress={handleSubmit}
-        >
-          Done
-        </Button>
-      </ScrollView>
+        renderItem={() => (
+          <>
+            <ScreenTitle>Preferences</ScreenTitle>
+            <SectionTitle>Area</SectionTitle>
+            <GooglePlacesAutocomplete
+              styles={{
+                textInput: styles.placeTextField,
+              }}
+              debounce={300}
+              placeholder="Anywhere"
+              onPress={(data, details = null) => {
+                setArea(data)
+              }}
+              query={{
+                key: "AIzaSyA8GPNfwLECbIQSl8jGUR7N_o41-YBYbM0",
+                language: "en",
+              }}
+            />
+            <CheckBoxField
+              title="Cuisines"
+              values={cuisines}
+              onChange={(key) =>
+                handleChangeCheckBox(key, cuisines, setCuisines)
+              }
+            />
+            <CheckBoxField
+              title="Budget"
+              values={budgets}
+              onChange={(key) => handleChangeCheckBox(key, budgets, setBudgets)}
+            />
+            <Button
+              mode="contained"
+              style={styles.submitButton}
+              onPress={handleSubmit}
+            >
+              Done
+            </Button>
+          </>
+        )}
+      />
     </SafeAreaView>
   );
 }
@@ -87,8 +107,9 @@ const styles = StyleSheet.create({
     paddingBottom: 90,
   },
 
-  textField: {
+  placeTextField: {
     backgroundColor: "#F0F5FF",
+    fontWeight: "700"
   },
 
   submitButton: {
