@@ -50,7 +50,7 @@ export default function QuestionScreen() {
         contentContainerStyle={styles.contentContainer}
         renderItem={() => (
           <>
-            <ScreenTitle>Preferences</ScreenTitle>
+            <ScreenTitle style={{ marginBottom: 10 }}>Preferences</ScreenTitle>
             <SectionTitle>Area</SectionTitle>
             <GooglePlacesAutocomplete
               styles={{

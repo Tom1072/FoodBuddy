@@ -57,13 +57,18 @@ export default function App() {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName='LandingScreen'
+          // screenOptions={{
+          //   header: ({ navigation, route, options, back }) => (<NavBar title={route.name} />)
+          // }}
           screenOptions={{
-            header: ({ navigation, route, options, back }) => (<NavBar title={route.name} />)
+            header: () => null
           }}
         >
           <Stack.Screen name='LandingScreen' component={LandingScreen} />
           <Stack.Screen name='LoginScreen' component={LoginScreen} />
           <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
+          <Stack.Screen name='MainScreen' component={MainScreen} />
+          <Stack.Screen name='QuestionScreen' component={QuestionScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -72,9 +77,9 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName='LandingScreen'
-          screenOptions={{
-            header: ({ navigation, route, options, back }) => (<NavBar title={route.name} />)
-          }}
+          // screenOptions={{
+          //   header: ({ navigation, route, options, back }) => (<NavBar title={route.name} />)
+          // }}
         >
           <Stack.Screen name='QuestionScreen' component={QuestionScreen} />
           <Stack.Screen name='MainScreen' component={MainScreen} />
