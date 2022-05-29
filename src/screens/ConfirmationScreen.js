@@ -12,9 +12,11 @@ import { useEffect } from "react";
 import bgColor from "../../assets/background.png";
 import loadIcon from "../../assets/loading.png";
 import { createMapLink } from "react-native-open-maps";
+import { useRecommendation } from "../stores/generalStore";
 
 export default function ConfirmationScreen() {
   let rotateValueHolder = new Animated.Value(0);
+  const recommendation = useRecommendation();
 
   const _goToYosemite = () => {
     createMapLink({ provider: 'google', end: 'New York City, NY' })

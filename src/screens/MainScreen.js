@@ -94,7 +94,7 @@ export default function MainScreen({ navigation }) {
         console.log(err);
       });
     // console.log("Swiped Left");
-    console.log(recommendation.photos[0]);
+    // console.log(recommendation.photos[0]);
   };
 
   const handleSwipeRight = () => {
