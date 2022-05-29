@@ -5,23 +5,68 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScreenTitle, SectionTitle, Subtitle } from "../components/Typography";
 import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Rating } from "react-native-ratings";
 import { Chip } from "react-native-paper";
 import NavBar from "../components/NavBar";
-import { useLoggedIn } from "../stores/generalStore";
+import { useLoggedIn, useChoice } from "../stores/generalStore";
 import GestureRecognizer from "react-native-swipe-gestures";
-
+import {
+  useRecommendation,
+  useSetRecommendation,
+} from "../stores/generalStore";
+import { findPlace } from "../utils/googlePlace";
 // import FoodCard from '../components/FoodCard.js';
 
+// const key = "AIzaSyA8GPNfwLECbIQSl8jGUR7N_o41-YBYbM0"
+const key = "AIzaSyBCsE3YX42Sg6N5zDsLHXO52X7K1m5SIuY";
 export default function MainScreen({ navigation }) {
-  const loggedIn = useLoggedIn();
-  const image = {
-    uri: "https://media.istockphoto.com/photos/vietnamese-pho-noodle-soup-dish-picture-id535168737?k=20&m=535168737&s=612x612&w=0&h=z0TiQPx6KtkQK2ZDXaLk22WyBUa1y-WDTxeg16ALYOE=",
+  const budgetArr = ["$", "$$", "$$$", "$$$$", "$$$$$"];
+  const budgetMap = {
+    "($)": 0,
+    "($$)": 1,
+    "($$$)": 2,
+    "($$$$)": 3,
+    "($$$$$)": 4,
   };
+
+  const chips = [
+    "Vietnamese Cuisine",
+    "Very expensive",
+    "Hot Soup",
+    "Healthy Food",
+    "Best in Winter",
+  ];
+
+  const popularItems = [
+    {
+      image:
+        "https://img.taste.com.au/bJGGTjzJ/taste/2017/01/vietnamese-spicy-meatball-banh-mi-120038-2.jpg",
+      name: "Banh My",
+      tag: "Healthy Food",
+      price: 7.99,
+    },
+  ];
+
+  const choice = useChoice();
+  const [recommendation, setRecommendation] = [
+    useRecommendation(),
+    useSetRecommendation(),
+  ];
+
+  const loggedIn = useLoggedIn();
+  const [restInfo, setRestInfo] = useState({
+    name: recommendation?.name,
+    address: recommendation?.formatted_address,
+    reviews: recommendation?.user_ratings_total,
+    rating: recommendation?.rating,
+    // image: "https://media.istockphoto.com/photos/vietnamese-pho-noodle-soup-dish-picture-id535168737?k=20&m=535168737&s=612x612&w=0&h=z0TiQPx6KtkQK2ZDXaLk22WyBUa1y-WDTxeg16ALYOE=",
+    image: `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${recommendation?.photos[0].photo_reference}&key=${key}&maxwidth=400&maxheight=400`,
+    budget: recommendation?.price_level,
+  });
 
   useEffect(() => {
     if (!loggedIn) navigation.navigate("LandingScreen");
@@ -30,16 +75,37 @@ export default function MainScreen({ navigation }) {
 
   // TODO: load a new restaurant
   const handleSwipeLeft = () => {
-    console.log("Swiped Left")
-  }
+    const { area, minBudget, maxBudget, cuisine } = choice;
+    findPlace(area, minBudget, maxBudget, cuisine)
+      .then((res) => {
+        // console.log(res);
+        setRecommendation(res);
+        setRestInfo({
+          name: res.name,
+          address: res.formatted_address,
+          reviews: res.user_ratings_total,
+          rating: res.rating,
+          image: `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${res?.photos[0].photo_reference}&key=${key}&maxwidth=400&maxheight=400`,
+          // image: `https://foodish-api.herokuapp.com/api/image`,
+          budget: res.price_level,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // console.log("Swiped Left");
+    console.log(recommendation.photos[0]);
+  };
 
   const handleSwipeRight = () => {
     navigation.navigate("ConfirmationScreen");
-  }
+  };
 
-  const renderTitleField = () => (
+  const renderTitleField = (name, address, budget) => (
     <View style={styles.titleField}>
-      <Subtitle color="#fff">1 Ts Gang Rd, Ottawa, Ontario</Subtitle>
+      <Subtitle color="#fff" style={{ fontSize: 15 }}>
+        {address}
+      </Subtitle>
       <View
         style={{
           display: "flex",
@@ -47,8 +113,12 @@ export default function MainScreen({ navigation }) {
           justifyContent: "space-between",
         }}
       >
-        <ScreenTitle color="#fff">Ts Gang Pho</ScreenTitle>
-        <ScreenTitle color="#fff">$$$</ScreenTitle>
+        <ScreenTitle style={{ fontSize: 23 }} color="#fff">
+          {name}
+        </ScreenTitle>
+        <ScreenTitle style={{ fontSize: 23 }} color="#fff">
+          {budgetArr[budget]}
+        </ScreenTitle>
       </View>
     </View>
   );
@@ -66,14 +136,14 @@ export default function MainScreen({ navigation }) {
     );
   };
 
-  const renderFoodDetail = (title) => {
+  const renderFoodDetail = (image, name, tag, price) => {
     return (
       <View style={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <Image
           style={{ width: 100, height: 100, borderRadius: 20 }}
           alternative
           source={{
-            uri: "https://img.taste.com.au/bJGGTjzJ/taste/2017/01/vietnamese-spicy-meatball-banh-mi-120038-2.jpg",
+            uri: image,
           }}
         />
         <View
@@ -85,11 +155,11 @@ export default function MainScreen({ navigation }) {
           }}
         >
           <View>
-            <SectionTitle style={{ marginHorizontal: 5 }}>{title}</SectionTitle>
-            {renderChip("Healthy Food")}
+            <SectionTitle style={{ marginHorizontal: 5 }}>{name}</SectionTitle>
+            {renderChip(tag)}
           </View>
           <View style={{ alignItems: "flex-end", justifyContent: "flex-end" }}>
-            <Subtitle style={{ fontSize: 12 }}>$ 7,99</Subtitle>
+            <Subtitle style={{ fontSize: 12 }}>$ {price}</Subtitle>
           </View>
         </View>
       </View>
@@ -123,7 +193,7 @@ export default function MainScreen({ navigation }) {
 
   return (
     <GestureRecognizer
-      style={{ height: "100%"}}
+      style={{ height: "100%" }}
       onSwipeRight={handleSwipeRight}
       onSwipeLeft={handleSwipeLeft}
     >
@@ -133,10 +203,10 @@ export default function MainScreen({ navigation }) {
         />
         <ImageBackground
           resizeMode="cover"
-          source={image}
+          source={{ uri: restInfo.image }}
           style={styles.background}
         >
-          {renderTitleField()}
+          {renderTitleField(restInfo.name, restInfo.address, restInfo.budget)}
         </ImageBackground>
         <ScrollView style={styles.details}>
           <View style={styles.ratingContainer}>
@@ -151,20 +221,19 @@ export default function MainScreen({ navigation }) {
                 style={styles.rating}
                 ratingColor="#FA5D5D"
                 imageSize={20}
+                startingValue={restInfo.rating}
               />
             </View>
           </View>
-          <SectionTitle>Tags</SectionTitle>
-          {renderCard([
-            renderChip("Vietnamese Cuisine"),
-            renderChip("Very expensive"),
-            renderChip("Hot Soup"),
-            renderChip("Healthy Food"),
-            renderChip("Best in Winter"),
-          ])}
-          <SectionTitle>Popular choices</SectionTitle>
-          {renderCard(renderFoodDetail("Banh my"))}
-          <View style={{ marginBottom: 50 }} />
+          {/* <SectionTitle>Tags</SectionTitle> */}
+          {/* {renderCard(chips.map((chip) => renderChip(chip)))} */}
+          {/* <SectionTitle>Popular choices</SectionTitle> */}
+          {/* {popularItems.map((item) =>
+            renderCard(
+              renderFoodDetail(item.image, item.name, item.tag, item.price)
+            )
+          )}
+          <View style={{ marginBottom: 50 }} /> */}
         </ScrollView>
       </View>
     </GestureRecognizer>
@@ -180,7 +249,7 @@ const styles = StyleSheet.create({
 
   background: {
     width: 400,
-    height: 300,
+    height: 600,
     display: "flex",
     flexDirection: "column",
     alignSelf: "center",

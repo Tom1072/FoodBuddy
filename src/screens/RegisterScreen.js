@@ -28,7 +28,7 @@ export default function RegisterScreen() {
         })
           .then(() => {
             console.log("Document successfully written!");
-            navigation.navigate("MainScreen", { loggedIn: true });
+            navigation.navigate("QuestionScreen", { loggedIn: true });
           })
           .catch((error) => {
             console.error("Error writing document: ", error);

@@ -51,11 +51,6 @@ export default function QuestionScreen({ navigation }) {
     console.log("Area:", !area ? "Anywhere" : area);
     console.log("Cuisines:", cuisines);
     console.log("Budgets:", budgets);
-    setChoice({
-      area: area,
-      cuisines: Object.keys(cuisines).filter((key) => cuisines[key]),
-      budgets: Object.keys(budgets).filter((key) => budgets[key]),
-    })
     const minBudget = budgetMap[Object.keys(budgets).find((key) => budgets[key])];
     const maxBudget = budgetMap[Object.keys(budgets).reverse().find((key) => budgets[key])];
     const parsedCuisine = Object.keys(cuisines).filter((key) => cuisines[key]);
@@ -65,6 +60,12 @@ export default function QuestionScreen({ navigation }) {
     console.log(`maxBudget: ${maxBudget}`);
     console.log(`parsedCuisine: ${JSON.stringify(parsedCuisine)}`);
     console.log(`area: ${area}`);
+    setChoice({
+      area,
+      minBudget,
+      maxBudget,
+      cuisines: parsedCuisine,
+    })
     findPlace(area, parsedCuisine, minBudget, maxBudget)
       .then((res) => {
         // console.log(res)

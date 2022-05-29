@@ -16,7 +16,7 @@ export default function LoginScreen({ navigation }) {
   const loggedIn = useLoggedIn();
 
   useEffect(() => {
-    if (loggedIn) navigation.navigate("MainScreen");
+    if (loggedIn) navigation.navigate("QuestionScreen");
     // console.log(route)
   }, []);
 

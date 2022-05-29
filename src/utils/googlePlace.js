@@ -1,4 +1,5 @@
 const key = "AIzaSyBCsE3YX42Sg6N5zDsLHXO52X7K1m5SIuY"
+// const key = "AIzaSyA8GPNfwLECbIQSl8jGUR7N_o41-YBYbM0"
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -60,7 +61,7 @@ export async function findPlace(place, cuisines, minPrice, maxPrice) {
     // Get the details of each restaurant
     let restaurants = [];
     for (let i = 0; i < results.length; i++) {
-        res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${results[i].place_id}&key=${key}`);
+        res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${results[i].place_id}&key=${key}&language=en`);
         data = await res.json();
         restaurants.push(data.result);
     }
