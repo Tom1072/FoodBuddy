@@ -9,11 +9,11 @@ We design the UI in Figma, then implementing in ReactNative. The recommendation 
 
 # Challenges
 This is the first time we form the team, so it takes a while to shape the team and setup environment for the project.
-We had to to some new tools includin ReactNative, Google Cloud Platform, Firebase, Google Place API. Therefore we face some trouble regarding authentication when fetching API.
+We had to to some new tools including ReactNative, Google Cloud Platform, Firebase, Google Place API. Therefore we face some trouble regarding authentication when fetching API.
 
 # What we learn from the project
 The project provides use opportunity to work in team in a short deadline project. The inspiration is important for everyone to achive the goal.
-We learn a lot 
+We learn a lot.
 
 # Instruction How To Run The App
  
