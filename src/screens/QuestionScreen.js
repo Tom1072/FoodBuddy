@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { FlatList } from "react-native-gesture-handler";
 
-export default function QuestionScreen() {
+export default function QuestionScreen({ navigation }) {
   const [area, setArea] = React.useState(null);
   const [budgets, setBudgets] = React.useState({
     "($)": true,
@@ -73,6 +73,7 @@ export default function QuestionScreen() {
       .catch((err) => {
         console.log(err)
       });
+    navigation.navigate('MainScreen');
   };
 
   return (
@@ -84,7 +85,7 @@ export default function QuestionScreen() {
         contentContainerStyle={styles.contentContainer}
         renderItem={() => (
           <>
-            <ScreenTitle>Preferences</ScreenTitle>
+            <ScreenTitle style={{ marginBottom: 10 }}>Preferences</ScreenTitle>
             <SectionTitle>Area</SectionTitle>
             <GooglePlacesAutocomplete
               styles={{
@@ -149,5 +150,6 @@ const styles = StyleSheet.create({
   submitButton: {
     marginVertical: 20,
     backgroundColor: "#6f92d9",
+    borderRadius: 70,
   },
 });

@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tom.foodbuddy"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,8 +27,12 @@
         "backgroundColor": "#FFFFFF"
       }
     },
+    "config": {},
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ]
   }
 }

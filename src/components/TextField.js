@@ -4,11 +4,13 @@ import { TextInput } from "react-native-paper";
 import { SectionTitle } from "./Typography";
 
 export default function TextField(props) {
-  const { title, value, onChange, placeholder } = props;
+  const { title, value, onChange, placeholder, ...others } = props;
 
   return (
     <View style={styles.container}>
-      <SectionTitle>{title}</SectionTitle>
+      <View style={{ width: "100%", alignItems: "center", marginVertical: 5}}>
+        <SectionTitle style={{ fontWeight: "700", color: "white"}}>{title}</SectionTitle>
+      </View>
       <TextInput
         dense
         mode="outlined"
@@ -18,6 +20,8 @@ export default function TextField(props) {
         outlineColor="transparent"
         activeOutlineColor="#3773ed"
         onChangeText={onChange}
+        theme={{ roundness: 20 }}
+        {...others}
       />
     </View>
   );
@@ -25,7 +29,7 @@ export default function TextField(props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10
+    marginVertical: 10,
   },
 
   textField: {
