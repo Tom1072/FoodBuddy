@@ -19,5 +19,6 @@ We learn a lot
  
  MacOS: npm install 
         npm start
+        
  Windows: npm install
           expo start
