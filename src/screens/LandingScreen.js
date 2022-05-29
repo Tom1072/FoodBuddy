@@ -3,7 +3,8 @@ import { View, StyleSheet, Text } from 'react-native'
 import { useTheme, Button } from 'react-native-paper'
 
 export default function LandingScreen({ navigation }) {
-  const theme = useTheme();
+  // const theme = useTheme();
+
   return (
       <View style={styles.container}>
         <Button onPress={() => {navigation.navigate('LoginScreen')}}> Login </Button>

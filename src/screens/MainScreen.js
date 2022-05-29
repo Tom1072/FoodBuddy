@@ -6,18 +6,28 @@ import {
   Image,
   Text
 } from "react-native";
+import { useEffect } from "react";
 import { ScreenTitle, SectionTitle, Subtitle } from "../components/Typography";
 import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Rating } from "react-native-ratings";
 import { Chip } from "react-native-paper";
+import NavBar from "../components/NavBar";
+import { useLoggedIn } from "../stores/generalStore";
+
 
 // import FoodCard from '../components/FoodCard.js';
 
-export default function MainScreen() {
+export default function MainScreen({ navigation }) {
+  const loggedIn = useLoggedIn();
   const image = {
     uri: "https://media.istockphoto.com/photos/vietnamese-pho-noodle-soup-dish-picture-id535168737?k=20&m=535168737&s=612x612&w=0&h=z0TiQPx6KtkQK2ZDXaLk22WyBUa1y-WDTxeg16ALYOE=",
   };
+
+  useEffect(() => {
+    if (!loggedIn) navigation.navigate("LandingScreen");
+    // console.log(route)
+  }, []);
 
   const renderTitleField = () => (
     <View style={styles.titleField}>
@@ -38,6 +48,7 @@ export default function MainScreen() {
   const renderChip = (text) => {
     return (
       <Chip
+        key={text}
         onPress={() => {}}
         textStyle={{ fontSize: 12 }}
         style={{ margin: 2 }}
@@ -57,7 +68,7 @@ export default function MainScreen() {
             uri: "https://img.taste.com.au/bJGGTjzJ/taste/2017/01/vietnamese-spicy-meatball-banh-mi-120038-2.jpg",
           }}
         />
-        <View style={{ marginLeft: 15, flex: 1, justifyContent: "space-between" }}>
+        <View style={{ marginLeft: 15, flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
           <View>
             <SectionTitle style={{ marginHorizontal: 5 }}>{title}</SectionTitle>
             {renderChip("Healthy Food")}
@@ -97,6 +108,7 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
+      <NavBar navigateToLanding={() => navigation.navigate("LandingScreen")} />
       <ImageBackground
         resizeMode="cover"
         source={image}
@@ -130,12 +142,6 @@ export default function MainScreen() {
         ])}
         <SectionTitle>Popular choices</SectionTitle>
         {renderCard(renderFoodDetail("Banh my"))}
-        {renderCard(renderFoodDetail("Banh my"))}
-        {renderCard(renderFoodDetail("Banh my"))}
-        {renderCard(renderFoodDetail("Banh my"))}
-        {renderCard(renderFoodDetail("Banh my"))}
-        {renderCard(renderFoodDetail("Banh my"))}
-        {renderCard(renderFoodDetail("Banh my"))}
         <View style={{ marginBottom: 50 }} />
       </ScrollView>
     </View>
@@ -146,6 +152,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    zIndex: -10
   },
 
   background: {

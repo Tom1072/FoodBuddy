@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useLoggedIn, useSetLoggedIn, useUser, useSetUser } from './src/stores/generalStore';
+import { useUser, useSetUser, useSetLoggedIn } from './src/stores/generalStore';
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -23,7 +23,6 @@ import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import QuestionScreen from './src/screens/QuestionScreen';
 import MainScreen from './src/screens/MainScreen';
-import NavBar from './src/components/NavBar';
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
@@ -32,8 +31,8 @@ const firestore = getFirestore(firebaseApp);
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = [useLoggedIn(), useSetLoggedIn()];
   const [user, setUser] = [useUser(), useSetUser()];
+  const setLoggedIn = useSetLoggedIn();
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
@@ -53,40 +52,21 @@ export default function App() {
     });
   }, []);
 
-  if (!loggedIn) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName='LandingScreen'
-          // screenOptions={{
-          //   header: ({ navigation, route, options, back }) => (<NavBar title={route.name} />)
-          // }}
-          screenOptions={{
-            header: () => null
-          }}
-        >
-          <Stack.Screen name='LandingScreen' component={LandingScreen} />
-          <Stack.Screen name='LoginScreen' component={LoginScreen} />
-          <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
-          <Stack.Screen name='MainScreen' component={MainScreen} />
-          <Stack.Screen name='QuestionScreen' component={QuestionScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  } else {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName='LandingScreen'
-          // screenOptions={{
-          //   header: ({ navigation, route, options, back }) => (<NavBar title={route.name} />)
-          // }}
-        >
-          <Stack.Screen name='QuestionScreen' component={QuestionScreen} />
-          <Stack.Screen name='MainScreen' component={MainScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-  }
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='LandingScreen'
+        screenOptions={{
+          header: () => null
+        }}
+      >
+        <Stack.Screen name='LandingScreen' component={LandingScreen} />
+        <Stack.Screen name='LoginScreen' component={LoginScreen} />
+        <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
+        <Stack.Screen name='QuestionScreen' component={QuestionScreen} />
+        <Stack.Screen name='MainScreen' component={MainScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { FlatList } from "react-native-gesture-handler";
 
-export default function QuestionScreen() {
+export default function QuestionScreen({ navigation }) {
   const [area, setArea] = React.useState(null);
   const [budgets, setBudgets] = React.useState({
     "Inexpensive ($)": true,
@@ -39,6 +39,7 @@ export default function QuestionScreen() {
     console.log("Area:", !area ? "Anywhere" : area);
     console.log("Cuisines:", cuisines);
     console.log("Budgets:", budgets);
+    navigation.navigate('MainScreen');
   };
 
   return (

@@ -4,7 +4,7 @@ import { TextInput } from "react-native-paper";
 import { SectionTitle } from "./Typography";
 
 export default function TextField(props) {
-  const { title, value, onChange, placeholder } = props;
+  const { title, value, onChange, placeholder, ...others } = props;
 
   return (
     <View style={styles.container}>
@@ -18,6 +18,7 @@ export default function TextField(props) {
         outlineColor="transparent"
         activeOutlineColor="#3773ed"
         onChangeText={onChange}
+        {...others}
       />
     </View>
   );
