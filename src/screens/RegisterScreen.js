@@ -1,9 +1,12 @@
-import { useState } from 'react'
-import { StyleSheet, View } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { TextInput, Button } from "react-native-paper";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc, getFirestore } from "firebase/firestore"; 
+import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { SectionTitle } from "../components/Typography";
+
+import TextField from "../components/TextField";
 
 export default function RegisterScreen() {
   const [name, setName] = useState("");
@@ -17,19 +20,22 @@ export default function RegisterScreen() {
     const firestore = getFirestore();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up 
-        console.log(userCredential.user)
+        // Signed up
+        console.log(userCredential.user);
         addDoc(collection(firestore, "users"), {
           email: email,
-          name: name
-        }).then(() => {
-          console.log("Document successfully written!");
-        }).catch((error) => {
-          console.error("Error writing document: ", error);
+          name: name,
         })
+          .then(() => {
+            console.log("Document successfully written!");
+            navigation.navigate("MainScreen", { loggedIn: true });
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+          });
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         // ..
       });
   }
@@ -39,36 +45,45 @@ export default function RegisterScreen() {
   }
 
   return (
-    <View>
-      <TextInput
-        label="Name"
+    <View style={styles.container}>
+      <TextField
+        title="Name"
+        placeholder="Name"
+        onChange={(text) => setName(text)}
         value={name}
-        onChangeText={text => setName(text)}
         autoCorrect={false}
       />
-      <TextInput
-        label="Email"
+      <TextField
+        title="Email"
+        placeholder="Email"
+        onChange={(text) => setEmail(text)}
         value={email}
-        onChangeText={text => setEmail(text)}
-        autoCapitalize={'none'}
         autoCorrect={false}
       />
-      <TextInput
-        label="Password"
+      <TextField
+        title="Password"
+        placeholder="Password"
         value={password}
-        onChangeText={text => setPassword(text)}
+        onChangeText={(text) => setPassword(text)}
         secureTextEntry={!showPassword}
         right={
           <TextInput.Icon
             name="eye"
-            onPress={() => setShowPassword(curr => !curr)}
+            onPress={() => setShowPassword((curr) => !curr)}
           />
         }
       />
-      <View style={styles.alternativeLayoutButtonContainer}>
-        <Button onPress={signUp}>Sign up</Button>
-        <Button onPress={signUpUsingGoogle}>Sign in using Google</Button>
-      </View>
+      <Button
+        onPress={signUp}
+        mode="contained"
+        style={styles.button}
+        uppercase={false}
+        color="#6f92d9"
+      >
+        <SectionTitle color="#fff" style={{ fontSize: 15 }}>
+          Sign up
+        </SectionTitle>
+      </Button>
     </View>
   );
 }
@@ -76,12 +91,17 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#fff",
+    padding: 35,
+    justifyContent: "center",
   },
   alternativeLayoutButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly'
-  }
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  button: {
+    marginVertical: 20,
+  },
 });
