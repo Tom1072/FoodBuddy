@@ -1,8 +1,16 @@
-import { StyleSheet, View, ScrollView, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  ImageBackground,
+  Image,
+  Text
+} from "react-native";
 import { ScreenTitle, SectionTitle, Subtitle } from "../components/Typography";
 import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Rating } from "react-native-ratings";
+import { Chip } from "react-native-paper";
 
 // import FoodCard from '../components/FoodCard.js';
 
@@ -27,6 +35,66 @@ export default function MainScreen() {
     </View>
   );
 
+  const renderChip = (text) => {
+    return (
+      <Chip
+        onPress={() => {}}
+        textStyle={{ fontSize: 12 }}
+        style={{ margin: 2 }}
+      >
+        {text}
+      </Chip>
+    );
+  };
+
+  const renderFoodDetail = (title) => {
+    return (
+      <View style={{ display: "flex", flexDirection: "row", width: "100%"}}>
+        <Image
+          style={{ width: 100, height: 100, borderRadius: 20 }}
+          alternative
+          source={{
+            uri: "https://img.taste.com.au/bJGGTjzJ/taste/2017/01/vietnamese-spicy-meatball-banh-mi-120038-2.jpg",
+          }}
+        />
+        <View style={{ marginLeft: 15, flex: 1, justifyContent: "space-between" }}>
+          <View>
+            <SectionTitle style={{ marginHorizontal: 5 }}>{title}</SectionTitle>
+            {renderChip("Healthy Food")}
+          </View>
+          <View style={{ alignItems: "flex-end", justifyContent: "flex-end" }}>
+            <Subtitle style={{ fontSize: 12 }}>$ 7,99</Subtitle>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const renderCard = (elements) => {
+    return (
+      <View
+        style={{
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 3,
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 5,
+          backgroundColor: "#fff",
+          marginVertical: 10,
+          padding: 10,
+          borderRadius: 20,
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          flexWrap: "wrap",
+        }}
+      >
+        {elements}
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -36,7 +104,7 @@ export default function MainScreen() {
       >
         {renderTitleField()}
       </ImageBackground>
-      <View style={styles.details}>
+      <ScrollView style={styles.details}>
         <View style={styles.ratingContainer}>
           <Button color="#fff" style={styles.heartButton}>
             <Icon name={"heart"} size={25} />
@@ -52,10 +120,23 @@ export default function MainScreen() {
             />
           </View>
         </View>
-      </View>
-      <ScrollView style={styles.cards}>
-        {/* <FoodCard name='abc' image='https://purepng.com/public/uploads/large/heart-icon-y1k.png' 
-          tags='Sweet' location='vn' price='11' /> */}
+        <SectionTitle>Tags</SectionTitle>
+        {renderCard([
+          renderChip("Vietnamese Cuisine"),
+          renderChip("Very expensive"),
+          renderChip("Hot Soup"),
+          renderChip("Healthy Food"),
+          renderChip("Best in Winter"),
+        ])}
+        <SectionTitle>Popular choices</SectionTitle>
+        {renderCard(renderFoodDetail("Banh my"))}
+        {renderCard(renderFoodDetail("Banh my"))}
+        {renderCard(renderFoodDetail("Banh my"))}
+        {renderCard(renderFoodDetail("Banh my"))}
+        {renderCard(renderFoodDetail("Banh my"))}
+        {renderCard(renderFoodDetail("Banh my"))}
+        {renderCard(renderFoodDetail("Banh my"))}
+        <View style={{ marginBottom: 50 }} />
       </ScrollView>
     </View>
   );
@@ -104,6 +185,7 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 20,
   },
 
   rating: {
@@ -123,16 +205,4 @@ const styles = StyleSheet.create({
     left: 10,
     fontSize: 25,
   },
-  price: {
-    color: "#f01a1a",
-    position: "absolute",
-    bottom: 5,
-    right: 10,
-    fontSize: 25,
-  },
-  heart: {
-    width: 20,
-    height: 20,
-  },
-  cards: {},
 });

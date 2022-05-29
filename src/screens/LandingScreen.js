@@ -8,6 +8,8 @@ export default function LandingScreen({ navigation }) {
       <View style={styles.container}>
         <Button onPress={() => {navigation.navigate('LoginScreen')}}> Login </Button>
         <Button onPress={() => {navigation.navigate('RegisterScreen')}} > Register </Button>
+        <Button onPress={() => {navigation.navigate('MainScreen')}} > Main </Button>
+        <Button onPress={() => {navigation.navigate('QuestionScreen')}} > Question </Button>
       </View>
   )
 }
