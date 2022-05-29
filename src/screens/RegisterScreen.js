@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, ImageBackground } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -45,7 +45,7 @@ export default function RegisterScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require("../../assets/login_signup_bg.png")} style={styles.container}>
       <TextField
         title="Name"
         placeholder="Name"
@@ -78,13 +78,13 @@ export default function RegisterScreen() {
         mode="contained"
         style={styles.button}
         uppercase={false}
-        color="#6f92d9"
+        color="rgba(0, 0, 0, 0.4)"
       >
-        <SectionTitle color="#fff" style={{ fontSize: 15 }}>
+        <SectionTitle color="#fff" style={{ fontSize: 17, fontWeight: "700" }}>
           Sign up
         </SectionTitle>
       </Button>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -102,6 +102,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   button: {
+    borderRadius: 70,
     marginVertical: 20,
+    marginBottom: 200
   },
 });

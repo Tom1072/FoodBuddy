@@ -4,7 +4,6 @@ import {
   ScrollView,
   ImageBackground,
   Image,
-  Text
 } from "react-native";
 import { useEffect } from "react";
 import { ScreenTitle, SectionTitle, Subtitle } from "../components/Typography";
@@ -14,7 +13,7 @@ import { Rating } from "react-native-ratings";
 import { Chip } from "react-native-paper";
 import NavBar from "../components/NavBar";
 import { useLoggedIn } from "../stores/generalStore";
-
+import GestureRecognizer from "react-native-swipe-gestures";
 
 // import FoodCard from '../components/FoodCard.js';
 
@@ -28,6 +27,15 @@ export default function MainScreen({ navigation }) {
     if (!loggedIn) navigation.navigate("LandingScreen");
     // console.log(route)
   }, []);
+
+  // TODO: load a new restaurant
+  const handleSwipeLeft = () => {
+    console.log("Swiped Left")
+  }
+
+  const handleSwipeRight = () => {
+    navigation.navigate("ConfirmationScreen");
+  }
 
   const renderTitleField = () => (
     <View style={styles.titleField}>
@@ -60,7 +68,7 @@ export default function MainScreen({ navigation }) {
 
   const renderFoodDetail = (title) => {
     return (
-      <View style={{ display: "flex", flexDirection: "row", width: "100%"}}>
+      <View style={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <Image
           style={{ width: 100, height: 100, borderRadius: 20 }}
           alternative
@@ -68,7 +76,14 @@ export default function MainScreen({ navigation }) {
             uri: "https://img.taste.com.au/bJGGTjzJ/taste/2017/01/vietnamese-spicy-meatball-banh-mi-120038-2.jpg",
           }}
         />
-        <View style={{ marginLeft: 15, flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            marginLeft: 15,
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <View>
             <SectionTitle style={{ marginHorizontal: 5 }}>{title}</SectionTitle>
             {renderChip("Healthy Food")}
@@ -107,44 +122,52 @@ export default function MainScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <NavBar navigateToLanding={() => navigation.navigate("LandingScreen")} />
-      <ImageBackground
-        resizeMode="cover"
-        source={image}
-        style={styles.background}
-      >
-        {renderTitleField()}
-      </ImageBackground>
-      <ScrollView style={styles.details}>
-        <View style={styles.ratingContainer}>
-          <Button color="#fff" style={styles.heartButton}>
-            <Icon name={"heart"} size={25} />
-          </Button>
-          <View style={{ display: "flex", alignItems: "flex-start" }}>
-            <SectionTitle>Popular Restaurant</SectionTitle>
-            <Rating
-              type="custom"
-              readonly
-              style={styles.rating}
-              ratingColor="#FA5D5D"
-              imageSize={20}
-            />
+    <GestureRecognizer
+      style={{ height: "100%"}}
+      onSwipeRight={handleSwipeRight}
+      onSwipeLeft={handleSwipeLeft}
+    >
+      <View style={styles.container}>
+        <NavBar
+          navigateToLanding={() => navigation.navigate("LandingScreen")}
+        />
+        <ImageBackground
+          resizeMode="cover"
+          source={image}
+          style={styles.background}
+        >
+          {renderTitleField()}
+        </ImageBackground>
+        <ScrollView style={styles.details}>
+          <View style={styles.ratingContainer}>
+            <Button color="#fff" style={styles.heartButton}>
+              <Icon name={"heart"} size={25} />
+            </Button>
+            <View style={{ display: "flex", alignItems: "flex-start" }}>
+              <SectionTitle>Popular Restaurant</SectionTitle>
+              <Rating
+                type="custom"
+                readonly
+                style={styles.rating}
+                ratingColor="#FA5D5D"
+                imageSize={20}
+              />
+            </View>
           </View>
-        </View>
-        <SectionTitle>Tags</SectionTitle>
-        {renderCard([
-          renderChip("Vietnamese Cuisine"),
-          renderChip("Very expensive"),
-          renderChip("Hot Soup"),
-          renderChip("Healthy Food"),
-          renderChip("Best in Winter"),
-        ])}
-        <SectionTitle>Popular choices</SectionTitle>
-        {renderCard(renderFoodDetail("Banh my"))}
-        <View style={{ marginBottom: 50 }} />
-      </ScrollView>
-    </View>
+          <SectionTitle>Tags</SectionTitle>
+          {renderCard([
+            renderChip("Vietnamese Cuisine"),
+            renderChip("Very expensive"),
+            renderChip("Hot Soup"),
+            renderChip("Healthy Food"),
+            renderChip("Best in Winter"),
+          ])}
+          <SectionTitle>Popular choices</SectionTitle>
+          {renderCard(renderFoodDetail("Banh my"))}
+          <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+      </View>
+    </GestureRecognizer>
   );
 }
 
@@ -152,7 +175,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    zIndex: -10
+    zIndex: -10,
   },
 
   background: {

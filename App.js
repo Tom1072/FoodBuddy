@@ -23,6 +23,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import QuestionScreen from './src/screens/QuestionScreen';
 import MainScreen from './src/screens/MainScreen';
+import ConfirmationScreen from './src/screens/ConfirmationScreen';
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
@@ -64,6 +65,7 @@ export default function App() {
         <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
         <Stack.Screen name='QuestionScreen' component={QuestionScreen} />
         <Stack.Screen name='MainScreen' component={MainScreen} />
+        <Stack.Screen name='ConfirmationScreen' component={ConfirmationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
