@@ -3,6 +3,8 @@ import { StyleSheet, ImageBackground } from "react-native";
 import { Button } from "react-native-paper";
 import { SectionTitle } from "../components/Typography";
 
+import QuestionScreen from './QuestionScreen';
+
 export default function LandingScreen({ navigation }) {
   // const theme = useTheme();
 

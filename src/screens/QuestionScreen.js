@@ -1,8 +1,9 @@
 import React from "react";
 import CheckBoxField from "../components/CheckBoxField";
-import TextField from "../components/TextField";
+import { useSetChoice, useSetRecommendation } from "../stores/generalStore";
+import { findPlace } from "../utils/googlePlace";
 
-import { StyleSheet, Text, ScrollView } from "react-native";
+import { StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { ScreenTitle, SectionTitle } from "../components/Typography";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,10 +14,11 @@ import { FlatList } from "react-native-gesture-handler";
 export default function QuestionScreen({ navigation }) {
   const [area, setArea] = React.useState(null);
   const [budgets, setBudgets] = React.useState({
-    "Inexpensive ($)": true,
-    "Moderately expensive ($$)": true,
-    "Expensive ($$$)": true,
-    "Very expensive ($$$$)": true,
+    "($)": true,
+    "($$)": true,
+    "($$$)": true,
+    "($$$$)": true,
+    "($$$$$)": true,
   });
   const [cuisines, setCuisines] = React.useState({
     Asian: true,
@@ -33,12 +35,44 @@ export default function QuestionScreen({ navigation }) {
     });
   };
 
+  const setChoice = useSetChoice();
+  const setRecommendation = useSetRecommendation();
+
   const handleSubmit = () => {
+    const budgetMap = {
+      "($)": 0,
+      "($$)": 1,
+      "($$$)": 2,
+      "($$$$)": 3,
+      "($$$$$)": 4,
+    };
     // TODO: check if area is empty or not
     // if yes, set to All or Anywhere (or based on the API query)
     console.log("Area:", !area ? "Anywhere" : area);
     console.log("Cuisines:", cuisines);
     console.log("Budgets:", budgets);
+    setChoice({
+      area: area,
+      cuisines: Object.keys(cuisines).filter((key) => cuisines[key]),
+      budgets: Object.keys(budgets).filter((key) => budgets[key]),
+    })
+    const minBudget = budgetMap[Object.keys(budgets).find((key) => budgets[key])];
+    const maxBudget = budgetMap[Object.keys(budgets).reverse().find((key) => budgets[key])];
+    const parsedCuisine = Object.keys(cuisines).filter((key) => cuisines[key]);
+
+    const area = !area ? "Anywhere" : area;
+    console.log(`minBudget: ${minBudget}`);
+    console.log(`maxBudget: ${maxBudget}`);
+    console.log(`parsedCuisine: ${JSON.stringify(parsedCuisine)}`);
+    console.log(`area: ${area}`);
+    findPlace(area, parsedCuisine, minBudget, maxBudget)
+      .then((res) => {
+        // console.log(res)
+        setRecommendation(res);
+      })
+      .catch((err) => {
+        console.log(err)
+      });
     navigation.navigate('MainScreen');
   };
 
