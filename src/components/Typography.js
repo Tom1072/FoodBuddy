@@ -16,12 +16,12 @@ export function Subtitle({ children, color="#000", style }) {
 const styles = StyleSheet.create({
   screenTitle: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
   },
 
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: "700",
   },
 
   subtitle: {

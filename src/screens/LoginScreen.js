@@ -1,19 +1,24 @@
-import { useState } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, ImageBackground } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-
 import {
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import TextField from "../components/TextField";
 import { SectionTitle } from "../components/Typography";
-import Divider from "../components/Divider";
+import { useLoggedIn } from "../stores/generalStore";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const loggedIn = useLoggedIn();
+
+  useEffect(() => {
+    if (loggedIn) navigation.navigate("MainScreen");
+    // console.log(route)
+  }, []);
 
   function signIn() {
     console.log("sign in");
@@ -30,7 +35,8 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    // <ImageBackground source={require("../../assets/Group 27.png")} style={styles.container}>
+    <ImageBackground source={require("../../assets/login_signup_bg.png")} style={styles.container}>
       <TextField
         title="Email"
         placeholder="Email"
@@ -57,14 +63,14 @@ export default function LoginScreen({ navigation }) {
         onPress={signIn}
         mode="contained"
         style={styles.button}
-        color="#6f92d9"
+        color="rgba(0, 0, 0, 0.4)"
         uppercase={false}
       >
-        <SectionTitle color="#fff" style={{ fontSize: 15 }}>
+        <SectionTitle color="#fff" style={{ fontSize: 18, fontWeight: "700" }}>
           Login
         </SectionTitle>
       </Button>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -83,5 +89,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 20,
+    borderRadius: 70,
+    marginBottom: 200
   },
 });
